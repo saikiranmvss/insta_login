@@ -27,12 +27,6 @@ const FacebookLogin = () => {
         };
 
         
-    const checkLoginState = () => {
-        window.FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
-        });
-    };
-
     const statusChangeCallback = (response) => {
         if (response.status === 'connected') {
             testAPI();
@@ -42,6 +36,12 @@ const FacebookLogin = () => {
     };
     
     }, []);
+
+    const checkLoginState = () => {
+        window.FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    };
 
 
     const handleFBLogin = () => {
