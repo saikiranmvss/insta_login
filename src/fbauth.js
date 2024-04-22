@@ -3,19 +3,19 @@
 import React, { useEffect, useCallback } from 'react';
 
 const FacebookLogin = () => {
+    const testAPI = useCallback(() => {
+        window.FB.api('/me', {fields: 'name,email'}, function(response) {
+            document.getElementById("profile").innerHTML = `Good to see you, ${response.name}. I see your email address is ${response.email}.`;
+        });
+    }, []);
+
     const statusChangeCallback = useCallback((response) => {
         if (response.status === 'connected') {
             testAPI();
         } else {
             console.log('User cancelled login or did not fully authorize.');
         }
-    }, []);
-
-    const testAPI = useCallback(() => {
-        window.FB.api('/me', {fields: 'name,email'}, function(response) {
-            document.getElementById("profile").innerHTML = `Good to see you, ${response.name}. I see your email address is ${response.email}.`;
-        });
-    }, []);
+    }, [testAPI]);  // Include testAPI in the dependencies
 
     useEffect(() => {
         // Load the Facebook SDK script
