@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Fbauth() {
+function App() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -66,4 +66,4 @@ function Fbauth() {
   );
 }
 
-export default Fbauth;
+export default App;
