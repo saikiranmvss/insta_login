@@ -60,7 +60,7 @@ function Fbauth() {
           <h1>{userData.username}</h1>
           <img src={userData.profile_picture} alt="profile" />
         </div>}
-      </header>
+      </header> 
     </div>
   );
 }
