@@ -25,16 +25,6 @@ const FacebookLogin = () => {
                 statusChangeCallback(response);
             });
         };
-
-        
-    const statusChangeCallback = (response) => {
-        if (response.status === 'connected') {
-            testAPI();
-        } else {
-            console.log('User cancelled login or did not fully authorize.');
-        }
-    };
-    
     }, []);
 
     const checkLoginState = () => {
@@ -43,6 +33,13 @@ const FacebookLogin = () => {
         });
     };
 
+    const statusChangeCallback = (response) => {
+        if (response.status === 'connected') {
+            testAPI();
+        } else {
+            console.log('User cancelled login or did not fully authorize.');
+        }
+    };
 
     const handleFBLogin = () => {
         window.FB.login(checkLoginState, {scope: 'email,public_profile'});
