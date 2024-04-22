@@ -25,7 +25,7 @@ const FacebookLogin = () => {
                 statusChangeCallback(response);
             });
         };
-    }, []);
+    }, [statusChangeCallback]);
 
     const checkLoginState = () => {
         window.FB.getLoginStatus(function(response) {
