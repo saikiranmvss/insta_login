@@ -31,7 +31,7 @@ function FbAuth() {
   }, [location]);
 
   const exchangeCodeForToken = (code) => {
-    const backendUrl = 'https://isntacheck.onrender.com/exchange-code';
+    const backendUrl = 'https://localhost:3001/exchange-code';
     axios.post(backendUrl, { code })
       .then(response => {
         setUserData(response.data);
