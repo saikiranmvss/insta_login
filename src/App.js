@@ -1,13 +1,14 @@
-import './App.css';
+// App.js
+
+import React from 'react';
+import FacebookLogin from './fbauth.js';
 
 function App() {
   return (
     <div className="App">
-      <button type="button">Get instagram profile details</button>
+      <FacebookLogin />
     </div>
   );
 }
 
 export default App;
-   
-
