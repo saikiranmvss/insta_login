@@ -1,8 +1,22 @@
 // FacebookLogin.js
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 const FacebookLogin = () => {
+    const statusChangeCallback = useCallback((response) => {
+        if (response.status === 'connected') {
+            testAPI();
+        } else {
+            console.log('User cancelled login or did not fully authorize.');
+        }
+    }, []);
+
+    const testAPI = useCallback(() => {
+        window.FB.api('/me', {fields: 'name,email'}, function(response) {
+            document.getElementById("profile").innerHTML = `Good to see you, ${response.name}. I see your email address is ${response.email}.`;
+        });
+    }, []);
+
     useEffect(() => {
         // Load the Facebook SDK script
         (function(d, s, id) {
@@ -21,35 +35,15 @@ const FacebookLogin = () => {
                 version: 'v19.0'
             });
 
-            window.FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
-            });
+            window.FB.getLoginStatus(statusChangeCallback);
         };
-    }, []);
+    }, [statusChangeCallback]);
 
-    const checkLoginState = () => {
-        window.FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
-        });
-    };
-
-    const statusChangeCallback = (response) => {
-        if (response.status === 'connected') {
-            testAPI();
-        } else {
-            console.log('User cancelled login or did not fully authorize.');
-        }
-    };
-
-    const handleFBLogin = () => {
-        window.FB.login(checkLoginState, {scope: 'email,public_profile'});
-    };
-
-    const testAPI = () => {
-        window.FB.api('/me', {fields: 'name,email'}, function(response) {
-            document.getElementById("profile").innerHTML = `Good to see you, ${response.name}. I see your email address is ${response.email}.`;
-        });
-    };
+    const handleFBLogin = useCallback(() => {
+        window.FB.login(() => {
+            window.FB.getLoginStatus(statusChangeCallback);
+        }, {scope: 'email,public_profile'});
+    }, [statusChangeCallback]);
 
     return (
         <div>
