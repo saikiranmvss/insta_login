@@ -1,24 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 function Fbauth() {
   const [userData, setUserData] = useState(null);
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-
-    if (code) {
-      fetchAccessToken(code);
-    }
-  }, []);
-
   const instagramClientId = '1421335018587943';
   const instagramClientSecret = '293ef37b66b6d7157db8a99c2fa584d0'; // WARNING: Never expose in production!
   const redirectUri = 'https://test-235b1.web.app/fbauth';
 
-  const fetchAccessToken = (code) => {
-    // Normally, this should be a POST request to your server, which would handle the token exchange
+  // useCallback ensures fetchAccessToken doesn't change unless its dependencies change
+  const fetchAccessToken = useCallback((code) => {
     const tokenUrl = `https://api.instagram.com/oauth/access_token`;
 
     const params = new URLSearchParams();
@@ -34,12 +25,11 @@ function Fbauth() {
         getUserDetails(response.data.access_token);
       })
       .catch(error => console.error('Error fetching access token:', error));
-  };
+  }, [instagramClientId, instagramClientSecret, redirectUri]); // Include all used variables as dependencies
 
+  // Moved outside to avoid re-definition on each render
   const getUserDetails = (accessToken) => {
-    // This would use the Instagram Graph API to fetch user data
-    // Normally requires additional backend handling
-    const apiUrl = 'https://graph.instagram.com/me?fields=id,username,account_type,media_count&access_token=' + accessToken;
+    const apiUrl = `https://graph.instagram.com/me?fields=id,username,account_type,media_count&access_token=${accessToken}`;
     
     axios.get(apiUrl)
       .then(response => {
@@ -47,6 +37,15 @@ function Fbauth() {
       })
       .catch(error => console.error('Error fetching user data:', error));
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+      fetchAccessToken(code);
+    }
+  }, [fetchAccessToken]); // Include fetchAccessToken in the dependency array
 
   return (
     <div className="App">
