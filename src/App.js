@@ -31,8 +31,7 @@ function FbAuth() {
   }, [location]);
 
   const exchangeCodeForToken = (code) => {
-    // Assume backendUrl points to your backend server
-    const backendUrl = 'http://localhost:3001/exchange-code';
+    const backendUrl = 'https://isntacheck.onrender.com/exchange-code';
     axios.post(backendUrl, { code })
       .then(response => {
         setUserData(response.data);
@@ -44,9 +43,9 @@ function FbAuth() {
     <div>
       {userData ? (
         <div>
-          <h1>Welcome, {userData.user.username}</h1>
-          <p>User ID: {userData.user.id}</p>
-          <p>Media Count: {userData.user.media_count}</p>
+          <h1>Welcome, {userData.userDetails.username}</h1>
+          <p>User ID: {userData.userDetails.id}</p>
+          <p>Media Count: {userData.userDetails.media_count}</p>
         </div>
       ) : (
         <h1>Authenticating...</h1>
